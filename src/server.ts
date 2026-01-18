@@ -16,6 +16,7 @@
 import "dotenv/config";  // loads .env automatically
 import app from "./app.js";  // Express app with routes & middleware
 import prisma from "./lib/prisma.js"; // Prisma client
+import { signInAdmin_DB } from "./modules/user/userService.js";
 
 const PORT = process.env.PORT || 3000;
 
@@ -26,7 +27,9 @@ const startServer = async () => {
     // Test DB connection
     await prisma.$connect();
     console.log("✅ Database connected");
-
+    // Ensure admin user exists
+    await signInAdmin_DB(); 
+    console.log("✅ Admin user check complete");
     // Start Express server
     app.listen(PORT, () => {
       console.log(`🚀 Server is running on http://localhost:${PORT}`);

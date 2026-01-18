@@ -22,8 +22,8 @@ export function authenticateMiddleware(role : string) {
             }
             // Attach user info to request object for downstream use
             req.user = {
-                userId: decoded.userId,
-                email: decoded.email,
+                id: decoded.id,
+                number: decoded.number,
                 role: decoded.role
             };
             next();

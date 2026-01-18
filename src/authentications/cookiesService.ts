@@ -17,6 +17,7 @@ export function setTokenToCookies(res : Response, token: string): void {
     }
 
     res.cookie("authToken", token, cookieOptions);
+    console.log("Token set in cookies successfully.");
 }
 /*
 * Purpose:

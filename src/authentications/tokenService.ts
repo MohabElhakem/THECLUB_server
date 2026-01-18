@@ -6,7 +6,7 @@ import err from "../error/index.js";
 //-----------
 // Generate JWT Token
 //-----------   
-export function generateToken(userId: number , role:string , email: string):signTokenInterface {
+export function generateToken(id: string , role:string , number: string):signTokenInterface {
     console.log("Generating token...");
     const secretKey = process.env.JWT_SECRET_KEY as string;
     const expiresIn: string = process.env.JWT_EXPIRES_IN || "1d";
@@ -14,7 +14,7 @@ export function generateToken(userId: number , role:string , email: string):sign
         console.error("JWT secret key is not defined in environment variables");
         throw new err.InternalError("JWT secret key is not defined in environment variables");
     }
-    const payload = { userId, role ,email};
+    const payload = { id, role ,number};
     const token = jwt.sign(payload, secretKey, { expiresIn } as jwt.SignOptions);
     return {token , payload};
 }

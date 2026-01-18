@@ -3,8 +3,8 @@ import type { Request } from "express";
 declare module "express"{
     export interface Request {
         user?: {
-            userId: number;
-            email: string;
+            id: string ;
+            number : string;
             role: string;
         }
     }

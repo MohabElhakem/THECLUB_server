@@ -31,6 +31,7 @@ import express from 'express';
 const app = express();
 import ErrorHandler from './error/ErrorHandler.js';
 import cookieParser from "cookie-parser";
+import userRouter from './modules/user/userRoutes.js';
 // for parsing cookies from requests
 
 //import router from './modules/routes/appRoutes.js';
@@ -53,7 +54,7 @@ app.get('/', (req, res) => {
 });
 
 // Mount main router
-//app.use('/task', router);
+app.use('/user', userRouter);
 
 // ------------------------------
 // Global Error Handler
