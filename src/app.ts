@@ -32,9 +32,18 @@ const app = express();
 import ErrorHandler from './error/ErrorHandler.js';
 import cookieParser from "cookie-parser";
 import userRouter from './modules/user/userRoutes.js';
-// for parsing cookies from requests
+import categoryRouter from './modules/category/categoryRoutes.js';
+import cors from "cors";
 
-//import router from './modules/routes/appRoutes.js';
+
+
+// ------------------------
+// CORS configuration
+// ------------------------
+app.use(cors({
+  origin: "http://localhost:5173", // your frontend URL
+  credentials: true,               // if you send cookies or auth headers
+}));
 
 
 
@@ -43,6 +52,7 @@ import userRouter from './modules/user/userRoutes.js';
 // ------------------------------
 // Parse incoming JSON requests
 app.use(express.json());
+// for parsing cookies from requests
 app.use(cookieParser()); 
 
 // ------------------------------
@@ -55,6 +65,7 @@ app.get('/', (req, res) => {
 
 // Mount main router
 app.use('/user', userRouter);
+app.use('/category', categoryRouter);
 
 // ------------------------------
 // Global Error Handler

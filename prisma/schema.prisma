@@ -5,9 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
-  engineType = "client"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -26,7 +24,7 @@ model User {
   number    String @unique
   address   String
   avatarUrl String? @default("https://res.cloudinary.com/dwevurdds/image/upload/v1768658460/default-profile-account-unknown-icon-black-silhouette-free-vector_wblsdu.jpg")
-  avatarPuplicId  String
+  avatarPuplicId  String?
   isActive Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -39,3 +37,69 @@ enum Role{
   SUPPORT
 }
 
+
+//------------------------------
+// Categories & Products
+//------------------------------
+
+model Category {
+  id        String     @id 
+  name      String
+  parentId  String?   // optional parent for subcategories
+  parent    Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryToCategory")
+  products  Product[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+///////////
+
+
+model Product {
+  id          String           @id 
+  name        String
+  description String?
+  price       Float
+  discountPrice Float?
+  gender      String?
+  ageFrom     Int?
+  ageTo       Int?
+  categoryId  String?
+  category    Category?        @relation(fields: [categoryId], references: [id])
+  variants    ProductVariant[]
+  images      ProductImage[]
+  completed   Boolean          @default(false)
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+/////////////
+
+
+model ProductVariant {
+  id        String   @id 
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  size      String
+  color     String
+  stock     Int      @default(0)
+  sku       String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, size, color]) // prevent duplicate variants
+}
+
+//////////////
+
+model ProductImage {
+  id        String   @id
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  imageUrl  String[]
+  isMain    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

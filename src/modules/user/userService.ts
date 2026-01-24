@@ -16,7 +16,7 @@
 
 
 import prisma from "../../lib/prisma.js";
-import type { Role } from "../../generated/prisma/client.js";
+import type { Role } from "@prisma/client";
 import err from "../../error/index.js";
 import bcrypt from "bcryptjs";
 import type {
