@@ -5,7 +5,8 @@ import type {
     FullCategoryCustom,
     FeatchCategoryField,
     FeatchCategoryResult,
-    Children
+    Children,
+    CategoriesOutput
 } from './categoryInterface.js'
 
 
@@ -35,7 +36,6 @@ export async function createCategory (Cname : string): Promise<string> {
 
 }
 /*
-* notes:
 * - this function only add an empty category nothing else
 * _ the id id det automaticully
 * - the output is the id for future steps
@@ -76,7 +76,6 @@ export async function featchCategory(
     }
 }
 /*
-* notes:
 *   - this function chick for the catgory
 *   - gives back the a boolean response 
 *   - and hole category with the children name and id only
@@ -103,9 +102,9 @@ export async function createSubCategory(subName: string , parentId: string) : Pr
     return SubCategory.id
 }
 /* 
-    notes: makes the subcategory in the db
-        - gives back the id
-        - trims the name and make it lowercase
+    -makes the subcategory in the db
+    - gives back the id
+    - trims the name and make it lowercase
 
 */
 
@@ -123,14 +122,28 @@ export function isNameInChildren (newName : string , children : Children[]){
     return childrenSet.has(newNameT)
 }
 /*
-    notes:
-        - the Function take the children array from the category
-        - it returns either true or false
+    - the Function take the children array from the category
+    - it returns either true or false
  */
 
 
 
 
 
+//---------------------
+// Get All Category
+//---------------------
+export async function allCategories (): Promise<CategoriesOutput[]> {
 
+    console.log('Featching all the main categories');
+    const categoryArray = await prisma.category.findMany({
+        where: {parentId: null},
+        select:{id: true ,name: true}
+    });
+    return categoryArray;
+}
+/**
+ * - featch all the avaliable categories with no parent id
+ * - the out but is an array of objects[ {.....} , {.....} , {.....} ];
+ */
 

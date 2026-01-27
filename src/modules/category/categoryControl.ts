@@ -87,10 +87,42 @@ const newSubcategory = asyncHandler(
         })
     }
 )
+/**
+ * - the endpoit take the name of the subcategory
+ * - and the id of the parent
+ * - it lookes for the parent first
+ * - then it looks for the provided name inside the childern
+ */
 
+
+
+//--------------------------
+// Get all main categories
+//--------------------------
+const mainCategories = asyncHandler(
+    async(
+        req: Request,
+        res: Response
+    ) => {
+        console.log("Proccessing the Featching of all the main categories");
+        const categoriesArray = await categoryService.allCategories();
+
+        if(categoriesArray.length === 0 ){
+            return res.status(200).json({
+                message: "لا يوجد فئات في قاعده البينات برجاء انشاء فئه"
+            });
+        }
+
+        return res.status(200).json({
+            categoriesArray
+        })
+
+    }
+)
 
 const index = {
     newCategory,
-    newSubcategory
+    newSubcategory,
+    mainCategories
 }
 export default index

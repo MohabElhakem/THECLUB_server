@@ -32,3 +32,8 @@ export interface NewCategoryCtrlInput {
 export interface NewSubCtrlInput{
     name: string,
 }
+
+export interface CategoriesOutput {
+    name: string , 
+    id : string
+}

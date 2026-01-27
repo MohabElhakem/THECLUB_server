@@ -51,4 +51,9 @@ router.post(
  *  - needs the parent id in the url
  */
 
+router.get(
+    '/main/categories',
+    categoryControl.mainCategories
+)
+
 export default router

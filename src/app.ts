@@ -33,6 +33,7 @@ import ErrorHandler from './error/ErrorHandler.js';
 import cookieParser from "cookie-parser";
 import userRouter from './modules/user/userRoutes.js';
 import categoryRouter from './modules/category/categoryRoutes.js';
+import authMe from './authentications/authMe.js';
 import cors from "cors";
 
 
@@ -64,6 +65,7 @@ app.get('/', (req, res) => {
 });
 
 // Mount main router
+app.use('/auth',authMe);
 app.use('/user', userRouter);
 app.use('/category', categoryRouter);
 
