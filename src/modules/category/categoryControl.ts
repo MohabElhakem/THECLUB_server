@@ -74,6 +74,13 @@ const newSubcategory = asyncHandler(
             console.log("There is no data feteched........!!!!");
             throw new err.InternalError('لم يتم تحميل بينات هذه الفئه');
         }
+    // see if there is product inside if there is return error
+    // the ?? 0 set the value of 0 in case of undefined
+        if((parent.data.products?.length ?? 0)> 0 ){
+            console.log("Parent category contains products. Subcategories are not allowed.");
+            throw new err.Conflict('لا يمكن انشاء فئه فرعيه داخل فئه تحتوي علي منتجات');
+        }
+
     // Now look inside the children
         const inChildren = categoryService.isNameInChildren(name , parent.data?.children as Children[]);
         if(inChildren === true){
@@ -119,10 +126,45 @@ const mainCategories = asyncHandler(
 
     }
 )
+/**
+ * 
+ */
+
+//------------------------
+// Get Category
+//------------------------
+
+const getCategory = asyncHandler(
+    async(
+        req: Request<{id? :string}>,
+        res: Response
+    )=>{
+        console.log("Processing the fetching of a category")
+        const {id} = req.params;
+        if(!id){
+            console.log("No id in the url to get the wanted category")
+            throw new err.BadRequest("لا يوجد رقم تعريفي لتحديد الفئه المراد اخراجها");
+        }
+        const category = await categoryService.featchCategory("id", id as string);
+        if(category.exist === false){
+            console.log("no category with that id.......!");
+            throw new err.NotFound("لا يوجد فئه بهذا الرقم التعريفي")
+        };
+        const Type = categoryService.categoryType(category.data);
+        return res.status(200).json({
+            category: category.data,
+            Type,
+        })
+    }
+)
+/**
+ * 
+ */
 
 const index = {
     newCategory,
     newSubcategory,
-    mainCategories
+    mainCategories,
+    getCategory,
 }
 export default index

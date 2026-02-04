@@ -8,7 +8,7 @@ export interface FullCategoryCustom {
     parent? : Category | null,
 
     children?: Children[],
-    products?: Product[],
+    products?: productOverView[],
 }
 
 export type FeatchCategoryField = "name"|"id" ;
@@ -21,6 +21,10 @@ export interface FeatchCategoryResult {
 
 
 export interface Children{
+    name: string ,
+    id : string
+}
+export interface productOverView{
     name: string ,
     id : string
 }
@@ -37,3 +41,5 @@ export interface CategoriesOutput {
     name: string , 
     id : string
 }
+
+export type CategoryTypeOutput = "nutural" | "sub" | "leaf" ;

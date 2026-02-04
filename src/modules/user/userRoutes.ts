@@ -11,7 +11,7 @@ const router = Router();
 router.post(
     "/signup",
     validation(joiSchemas.createUserSchema),
-    authService.authenticateMiddleware("ADMIN"),
+    authService.authenticateMiddleware(["ADMIN"]),
     userCtrl.createUser_CTRL
 )
 /*

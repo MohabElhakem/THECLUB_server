@@ -12,7 +12,7 @@ const router = Router()
 router.post(
     '/new/category',
     validate(categoryValidation.NewCategoryAPIinput),
-    authService.authenticateMiddleware("ADMIN"),
+    authService.authenticateMiddleware(["ADMIN"]),
     categoryControl.newCategory
 )
 /**
@@ -33,7 +33,7 @@ router.post(
 router.post(
     '/new/sub/category/:parentId',
     validate(categoryValidation.NewCategoryAPIinput),
-    authService.authenticateMiddleware("ADMIN"),
+    authService.authenticateMiddleware(["ADMIN"]),
     categoryControl.newSubcategory
 )
 /**
@@ -51,9 +51,20 @@ router.post(
  *  - needs the parent id in the url
  */
 
+//---------------------------------
 router.get(
     '/main/categories',
+    authService.authenticateMiddleware(["ADMIN","VENDOR"]),
     categoryControl.mainCategories
 )
-
+/**
+ * notes:
+ * - accessed by the admin or vendor
+ */
+//----------------------------------
+router.get(
+    '/:id',
+    authService.authenticateMiddleware(["ADMIN","VENDOR"]),
+    categoryControl.getCategory
+)
 export default router

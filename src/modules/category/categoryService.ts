@@ -6,7 +6,8 @@ import type {
     FeatchCategoryField,
     FeatchCategoryResult,
     Children,
-    CategoriesOutput
+    CategoriesOutput,
+    CategoryTypeOutput,
 } from './categoryInterface.js'
 
 
@@ -61,6 +62,9 @@ export async function featchCategory(
         include: {
             children: {
                 select : {id: true, name : true }
+            },
+            products: {
+                select: {id:true , name:true}
             }
         }
     })
@@ -147,3 +151,18 @@ export async function allCategories (): Promise<CategoriesOutput[]> {
  * - the out but is an array of objects[ {.....} , {.....} , {.....} ];
  */
 
+
+//--------------------
+//Decide the type
+//--------------------
+export function categoryType (category : FullCategoryCustom | null): CategoryTypeOutput {
+    if(category === null){
+        throw new err.BadRequest("There is no object to decide");
+    }
+    const hasChildren = (category.children?.length ?? 0) > 0 ;
+    const hasProducts = (category.products?.length ?? 0) > 0;
+
+    if(hasChildren && !hasProducts) return "sub";
+    if(!hasChildren && hasProducts) return "nutural";
+    return "nutural";
+}

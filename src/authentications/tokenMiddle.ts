@@ -5,7 +5,7 @@ import err from "../error/index.js";
 //-----------
 // Authenticate Middleware from the cookies
 //-----------   
-export function authenticateMiddleware(role : string) {   
+export function authenticateMiddleware(role : string[] = []) {   
 
     return ( req: Request, res: Response, next: NextFunction ,) =>{
         console.log("Authenticating from cookies...\n");
@@ -16,7 +16,7 @@ export function authenticateMiddleware(role : string) {
         }
         try {
             const decoded = decodeToken(token);
-            if (role && decoded.role !== role) {
+            if (role.length>0 && !role.includes(decoded.role)) {
                 console.log(`User role ${decoded.role} does not have access. Required role: ${role}`);
                 return next(new err.Forbidden("You do not have permission to access this resource"));
             }
