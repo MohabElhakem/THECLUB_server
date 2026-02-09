@@ -8,6 +8,7 @@ import type {
     Children,
     CategoriesOutput,
     CategoryTypeOutput,
+    Breadcrumb,
 } from './categoryInterface.js'
 
 
@@ -27,10 +28,12 @@ export async function createCategory (Cname : string): Promise<string> {
     }
     const trimmedName = Cname.trim();
     console.log({ name: trimmedName });
+    const GeneratedId = nanoid(10); // and you will use it in two palces 
     const newCategory = await prisma.category.create({
         data: { 
-            id : nanoid(10) , // make the for the category
-            name: trimmedName }
+            id : GeneratedId, // make the for the category
+            name: trimmedName ,
+            path: GeneratedId}
     });
 
     return newCategory.id;
@@ -74,9 +77,27 @@ export async function featchCategory(
             data: null,
         }
     }
+
+    // breadcrumb logic for the tree
+    let breadcrumb :  Breadcrumb = [];
+    if(category.path){
+        try {
+            const ids = category.path.split(".") // split pathes id 
+            breadcrumb = await prisma.category.findMany({
+                where: {id: {in: ids}},
+                orderBy: {path : "asc"},
+                select:{id:true , name:true},
+            })
+        } catch (error) {
+            throw new err.InternalError("proplem featching the breadcrumb")
+        }
+    }
+
+
     return {
         exist : true,
-        data: category as FullCategoryCustom
+        data: category as FullCategoryCustom,
+        breadcrumb 
     }
 }
 /*
@@ -92,14 +113,16 @@ export async function featchCategory(
 //-----------------------
 // Create SubCategory
 //-----------------------
-export async function createSubCategory(subName: string , parentId: string) : Promise<string>{
+export async function createSubCategory(subName: string , parentId: string , parentPath: string) : Promise<string>{
     console.log("creating sub category...........")
     const subNameT = subName.trim().toLocaleLowerCase()
+    const GeneratedId = nanoid(10)//
     const SubCategory = await prisma.category.create({
         data: {
-            id : nanoid(10),
+            id : GeneratedId,
             name: subNameT,
             parentId,
+            path: `${parentPath}.${GeneratedId}`
         }
     })
 

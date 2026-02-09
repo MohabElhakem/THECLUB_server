@@ -9,6 +9,7 @@ export interface FullCategoryCustom {
 
     children?: Children[],
     products?: productOverView[],
+    path: string
 }
 
 export type FeatchCategoryField = "name"|"id" ;
@@ -16,7 +17,8 @@ export type FeatchCategoryField = "name"|"id" ;
 
 export interface FeatchCategoryResult {
     exist: boolean,
-    data: FullCategoryCustom | null
+    data: FullCategoryCustom | null,
+    breadcrumb?: {id: String , name: String}[]
 }
 
 
@@ -43,3 +45,5 @@ export interface CategoriesOutput {
 }
 
 export type CategoryTypeOutput = "nutural" | "sub" | "leaf" ;
+
+export type Breadcrumb = {id: String , name:string}[];

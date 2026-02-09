@@ -88,7 +88,7 @@ const newSubcategory = asyncHandler(
             throw new err.Conflict('يوجد بالفعل فئه فرعيه بهذارالاسم');
         }
     // now make the subCategory
-        await categoryService.createSubCategory(name , parentId);
+        await categoryService.createSubCategory(name , parentId , parent.data.path);
         return res.status(201).json({
             message: "لقد تم تكوين فئه فرعيه بنجاح"
         })
@@ -153,6 +153,7 @@ const getCategory = asyncHandler(
         const Type = categoryService.categoryType(category.data);
         return res.status(200).json({
             category: category.data,
+            breadcrumb: category.breadcrumb,
             Type,
         })
     }
